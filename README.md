@@ -12,7 +12,10 @@ calcula VaR de carteiras nesta etapa.
 - cálculo de retornos simples a partir de preços;
 - VaR histórico;
 - VaR paramétrico com distribuição normal;
-- contagem simples de violações de VaR.
+- identificação e contagem de violações de VaR;
+- teste de cobertura incondicional de Kupiec;
+- teste de independência de Christoffersen;
+- teste de cobertura condicional de Christoffersen.
 
 Os valores de VaR são apresentados como números não negativos: um VaR de `0.02`
 representa uma perda potencial de 2%. Consulte a [metodologia](docs/methodology.md)
@@ -102,6 +105,9 @@ e os seguintes resultados para 95% de confiança:
 | VaR histórico | 1,8589% |
 | VaR paramétrico normal | 1,8729% |
 | Violações do VaR histórico | 25 (5,01%) |
+| Kupiec (p-valor) | 0,9918 |
+| Christoffersen — independência (p-valor) | 0,8044 |
+| Christoffersen — cobertura condicional (p-valor) | 0,9697 |
 
 ![Trajetória da série sintética de preços](docs/images/synthetic_prices.png)
 
@@ -113,10 +119,14 @@ semelhantes às observadas, uma perda diária de aproximadamente 1,86% seria
 excedida em cerca de 5% dos dias. As 25 violações correspondem a 5,01% da amostra,
 valor próximo à taxa esperada para o nível de confiança adotado.
 
+Ao nível de significância de 5%, os três p-valores são superiores a 0,05. Assim,
+não há evidência para rejeitar a frequência esperada de violações, sua
+independência temporal ou a cobertura condicional neste exemplo sintético.
+
 Essa leitura é apenas didática: o VaR foi estimado e avaliado na mesma amostra
 sintética. Portanto, o resultado não constitui uma validação fora da amostra nem
-garante desempenho futuro. Uma etapa posterior deverá usar previsões móveis e
-testes formais de cobertura e independência, como Kupiec e Christoffersen.
+garante desempenho futuro. Os testes de Kupiec e Christoffersen avaliam aspectos
+específicos das violações, mas não demonstram isoladamente que o modelo é adequado.
 
 ## Próximos passos
 
@@ -125,7 +135,7 @@ testes formais de cobertura e independência, como Kupiec e Christoffersen.
 - estimação e uso da matriz de covariância;
 - VaR por simulação de Monte Carlo;
 - Expected Shortfall;
-- backtesting estatístico mais completo;
+- backtesting fora da amostra com janelas móveis;
 - visualizações e geração de relatórios.
 
 Essas extensões serão feitas em etapas para preservar a clareza do código e
