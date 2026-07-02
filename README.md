@@ -54,6 +54,12 @@ APIs nem baixa dados externos.
 python examples/simple_var_demo.py
 ```
 
+Para reproduzir os gráficos apresentados neste README:
+
+```bash
+python examples/generate_var_charts.py
+```
+
 ## Executar os testes
 
 ```bash
@@ -73,14 +79,44 @@ calculo-analise-var/
 │   ├── var_methods.py
 │   └── backtesting.py
 ├── examples/
-│   └── simple_var_demo.py
+│   ├── simple_var_demo.py
+│   └── generate_var_charts.py
 ├── tests/
 │   ├── test_returns.py
 │   ├── test_var_methods.py
 │   └── test_backtesting.py
 └── docs/
-    └── methodology.md
+    ├── methodology.md
+    └── images/
+        ├── synthetic_prices.png
+        └── var_analysis.png
 ```
+
+## Resultados e conclusão
+
+Com a semente aleatória fixa do exemplo, foram obtidas 499 observações de retorno
+e os seguintes resultados para 95% de confiança:
+
+| Métrica | Resultado |
+| --- | ---: |
+| VaR histórico | 1,8589% |
+| VaR paramétrico normal | 1,8729% |
+| Violações do VaR histórico | 25 (5,01%) |
+
+![Trajetória da série sintética de preços](docs/images/synthetic_prices.png)
+
+![Retornos, violações e distribuição](docs/images/var_analysis.png)
+
+Os dois métodos produziram estimativas próximas, resultado coerente com a geração
+de retornos por uma distribuição normal. O VaR histórico indica que, em condições
+semelhantes às observadas, uma perda diária de aproximadamente 1,86% seria
+excedida em cerca de 5% dos dias. As 25 violações correspondem a 5,01% da amostra,
+valor próximo à taxa esperada para o nível de confiança adotado.
+
+Essa leitura é apenas didática: o VaR foi estimado e avaliado na mesma amostra
+sintética. Portanto, o resultado não constitui uma validação fora da amostra nem
+garante desempenho futuro. Uma etapa posterior deverá usar previsões móveis e
+testes formais de cobertura e independência, como Kupiec e Christoffersen.
 
 ## Próximos passos
 
