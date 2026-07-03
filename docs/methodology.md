@@ -9,6 +9,20 @@ que, segundo o método adotado, há 5% de probabilidade de a perda diária super
 
 Nesta versão, todos os cálculos usam retornos simples de uma única série de preços.
 
+## Dados de mercado
+
+O projeto pode gerar preços sintéticos ou baixar dados diários do Yahoo Finance
+por meio da biblioteca `yfinance`. Para os dados reais, é usado o fechamento com
+ajuste automático, reduzindo distorções provocadas por dividendos e
+desdobramentos. A consulta recebe um ticker e um período, mas continua retornando
+somente uma série de preços; múltiplos ativos ainda não são agregados.
+
+Dados externos podem conter lacunas, erros ou revisões e dependem da
+disponibilidade do provedor. A implementação remove fechamentos ausentes e rejeita
+respostas vazias, preços não positivos e valores não finitos. O `yfinance` é uma
+biblioteca independente do Yahoo e seu uso deve respeitar os termos aplicáveis à
+fonte dos dados.
+
 ## VaR histórico
 
 O método histórico usa diretamente a distribuição dos retornos observados. Para

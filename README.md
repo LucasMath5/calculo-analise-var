@@ -3,13 +3,14 @@
 Projeto de portfólio em Python para calcular e comparar métodos básicos de Value
 at Risk (VaR), com foco em risco de mercado, estatística e aplicações financeiras.
 
-Esta primeira versão trabalha com **uma única série de preços ou retornos**. Ela
-foi mantida propositalmente simples e serve como base para extensões futuras; não
-calcula VaR de carteiras nesta etapa.
+Esta versão trabalha com **uma única série de preços ou retornos**. Os preços
+podem ser obtidos do Yahoo Finance ou gerados sinteticamente para demonstrações
+reproduzíveis. O projeto não calcula VaR de carteiras nesta etapa.
 
 ## Métodos implementados
 
 - cálculo de retornos simples a partir de preços;
+- download de fechamentos ajustados pelo Yahoo Finance;
 - VaR histórico;
 - VaR paramétrico com distribuição normal;
 - identificação e contagem de violações de VaR;
@@ -48,10 +49,43 @@ Em seguida:
 python -m pip install -r requirements.txt
 ```
 
-## Executar o exemplo
+## Fontes de dados
 
-O exemplo usa somente preços sintéticos e uma semente aleatória fixa. Não acessa
-APIs nem baixa dados externos.
+O módulo `src/market_data.py` usa a biblioteca `yfinance` para obter preços
+diários de fechamento ajustados por dividendos e desdobramentos. Não é necessária
+uma chave de API. Para ações brasileiras, use o sufixo `.SA`, como `PETR4.SA` ou
+`VALE3.SA`.
+
+O `yfinance` é um projeto independente, sem afiliação ou aprovação do Yahoo. A
+própria biblioteca informa que os dados são destinados a pesquisa, educação e
+uso pessoal; consulte os [termos indicados na documentação do
+yfinance](https://ranaroussi.github.io/yfinance/) antes de outros usos.
+
+## Executar os exemplos
+
+### Dados reais do Yahoo Finance
+
+O comando abaixo baixa dois anos de preços ajustados da Petrobras:
+
+```bash
+python examples/yahoo_var_demo.py PETR4.SA --period 2y
+```
+
+O ticker é opcional e o padrão é `PETR4.SA`. Também é possível alterar o período
+e o nível de confiança:
+
+```bash
+python examples/yahoo_var_demo.py AAPL --period 5y --confidence 0.99
+```
+
+Períodos usuais incluem `6mo`, `1y`, `2y`, `5y`, `10y` e `max`. Como esse exemplo
+consulta um serviço externo, ele requer conexão com a internet e pode ser afetado
+por indisponibilidade ou mudanças no Yahoo Finance.
+
+### Dados sintéticos
+
+O exemplo sintético usa uma semente aleatória fixa, funciona sem internet e
+permanece útil para reproduzir os resultados apresentados neste README:
 
 ```bash
 python examples/simple_var_demo.py
@@ -80,14 +114,17 @@ calculo-analise-var/
 │   ├── __init__.py
 │   ├── returns.py
 │   ├── var_methods.py
-│   └── backtesting.py
+│   ├── backtesting.py
+│   └── market_data.py
 ├── examples/
 │   ├── simple_var_demo.py
+│   ├── yahoo_var_demo.py
 │   └── generate_var_charts.py
 ├── tests/
 │   ├── test_returns.py
 │   ├── test_var_methods.py
-│   └── test_backtesting.py
+│   ├── test_backtesting.py
+│   └── test_market_data.py
 └── docs/
     ├── methodology.md
     └── images/
@@ -97,8 +134,9 @@ calculo-analise-var/
 
 ## Resultados e conclusão
 
-Com a semente aleatória fixa do exemplo, foram obtidas 499 observações de retorno
-e os seguintes resultados para 95% de confiança:
+Os gráficos e números abaixo continuam baseados no exemplo sintético, para que
+não mudem a cada consulta à API. Com a semente aleatória fixa, foram obtidas 499
+observações de retorno e os seguintes resultados para 95% de confiança:
 
 | Métrica | Resultado |
 | --- | ---: |
