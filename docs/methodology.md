@@ -38,6 +38,21 @@ distribuição normal. O quantil correspondente ao nível de confiança é entã
 obtido com esses parâmetros. É simples e rápido, mas a hipótese de normalidade
 pode subestimar eventos extremos e assimetrias observadas em mercados financeiros.
 
+## Expected Shortfall
+
+Expected Shortfall (ES) mede a perda média nos cenários que ultrapassam o VaR.
+Enquanto o VaR fornece um ponto de corte, o ES descreve a severidade média da
+cauda. Assim, um ES diário de 3% a 95% indica que a perda média nos piores 5% dos
+cenários é de aproximadamente 3%.
+
+No método histórico, o projeto calcula a média dos retornos iguais ou inferiores
+ao quantil usado no VaR e converte o resultado para uma perda positiva. No método
+paramétrico, assume normalidade e calcula analiticamente a média da cauda inferior
+a partir da média e do desvio-padrão amostral dos retornos.
+
+Em condições usuais, o ES é maior ou igual ao VaR calculado no mesmo nível de
+confiança porque resume perdas que já ultrapassaram aquele limite.
+
 ## Violações de VaR
 
 Uma violação ocorre quando a perda realizada excede o VaR estimado. Como os
@@ -72,10 +87,10 @@ apenas indica que o teste não encontrou evidência suficiente para rejeitá-lo.
 
 ## Limitações
 
-O VaR depende da qualidade dos dados, da janela de estimação, do nível de confiança
-e das hipóteses do método. Além disso, não mede a severidade das perdas que
-ultrapassam seu limite e pode não capturar adequadamente mudanças de regime,
-caudas pesadas ou falta de liquidez.
+VaR e ES dependem da qualidade dos dados, da janela de estimação, do nível de
+confiança e das hipóteses do método. O ES descreve melhor a severidade da cauda,
+mas ambos podem não capturar adequadamente mudanças de regime, caudas pesadas ou
+falta de liquidez. A versão paramétrica também herda a hipótese de normalidade.
 
 Os testes de cobertura têm baixo poder em amostras pequenas, especialmente para
 níveis de confiança elevados, nos quais as violações são raras. Além disso, uma
@@ -92,6 +107,8 @@ sem alterar a proposta simples deste primeiro módulo.
 
 ## Referências
 
+- Basel Committee on Banking Supervision. *Market risk terminology* — definição
+  de Expected Shortfall. <https://www.bis.org/basel_framework/chapter/MAR/10.htm>
 - Kupiec, P. H. (1995). *Techniques for Verifying the Accuracy of Risk
   Measurement Models*. The Journal of Derivatives, 3(2), 73–84.
   <https://doi.org/10.3905/jod.1995.407942>

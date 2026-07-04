@@ -17,7 +17,12 @@ from src.backtesting import (
 )
 from src.market_data import download_yahoo_prices
 from src.returns import calculate_simple_returns
-from src.var_methods import historical_var, normal_parametric_var
+from src.var_methods import (
+    historical_expected_shortfall,
+    historical_var,
+    normal_parametric_expected_shortfall,
+    normal_parametric_var,
+)
 
 
 def parse_arguments() -> argparse.Namespace:
@@ -53,6 +58,11 @@ def main() -> None:
 
     historical = historical_var(returns, arguments.confidence)
     parametric = normal_parametric_var(returns, arguments.confidence)
+    historical_es = historical_expected_shortfall(returns, arguments.confidence)
+    parametric_es = normal_parametric_expected_shortfall(
+        returns,
+        arguments.confidence,
+    )
     violations = calculate_var_violations(returns, historical)
     kupiec_result = kupiec_test(violations, arguments.confidence)
     independence_result = christoffersen_independence_test(violations)
@@ -64,13 +74,15 @@ def main() -> None:
     start_date = prices.index.min().date()
     end_date = prices.index.max().date()
 
-    print("Cálculo e Análise de Value at Risk — Yahoo Finance")
+    print("Value at Risk e Expected Shortfall — Yahoo Finance")
     print(f"Ativo: {arguments.ticker.upper()}")
     print(f"Período disponível: {start_date} a {end_date}")
     print(f"Observações de preço: {len(prices)}")
     print(f"Nível de confiança: {arguments.confidence:.0%}")
     print(f"VaR histórico: {historical:.4%}")
     print(f"VaR paramétrico normal: {parametric:.4%}")
+    print(f"Expected Shortfall histórico: {historical_es:.4%}")
+    print(f"Expected Shortfall paramétrico normal: {parametric_es:.4%}")
     print(f"Violações do VaR histórico: {int(violations.sum())}")
     print(f"Teste de Kupiec (p-valor): {kupiec_result['p_value']:.4f}")
     print(

@@ -1,4 +1,4 @@
-"""Ferramentas básicas para cálculo e análise de Value at Risk."""
+"""Ferramentas para análise de Value at Risk e Expected Shortfall."""
 
 from .backtesting import (
     calculate_var_violations,
@@ -9,12 +9,19 @@ from .backtesting import (
 )
 from .market_data import download_yahoo_prices
 from .returns import calculate_simple_returns
-from .var_methods import historical_var, normal_parametric_var
+from .var_methods import (
+    historical_expected_shortfall,
+    historical_var,
+    normal_parametric_expected_shortfall,
+    normal_parametric_var,
+)
 
 __all__ = [
     "calculate_simple_returns",
     "historical_var",
     "normal_parametric_var",
+    "historical_expected_shortfall",
+    "normal_parametric_expected_shortfall",
     "calculate_var_violations",
     "count_var_violations",
     "kupiec_test",

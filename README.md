@@ -1,7 +1,8 @@
 # Cálculo e Análise de Value at Risk
 
 Projeto de portfólio em Python para calcular e comparar métodos básicos de Value
-at Risk (VaR), com foco em risco de mercado, estatística e aplicações financeiras.
+at Risk (VaR) e Expected Shortfall (ES), com foco em risco de mercado, estatística
+e aplicações financeiras.
 
 Esta versão trabalha com **uma única série de preços ou retornos**. Os preços
 podem ser obtidos do Yahoo Finance ou gerados sinteticamente para demonstrações
@@ -13,14 +14,16 @@ reproduzíveis. O projeto não calcula VaR de carteiras nesta etapa.
 - download de fechamentos ajustados pelo Yahoo Finance;
 - VaR histórico;
 - VaR paramétrico com distribuição normal;
+- Expected Shortfall histórico;
+- Expected Shortfall paramétrico normal;
 - identificação e contagem de violações de VaR;
 - teste de cobertura incondicional de Kupiec;
 - teste de independência de Christoffersen;
 - teste de cobertura condicional de Christoffersen.
 
-Os valores de VaR são apresentados como números não negativos: um VaR de `0.02`
-representa uma perda potencial de 2%. Consulte a [metodologia](docs/methodology.md)
-para uma explicação breve dos conceitos e limitações.
+As medidas de risco são apresentadas como números não negativos: um VaR ou ES de
+`0.02` representa uma perda de 2%. Consulte a [metodologia](docs/methodology.md)
+para uma explicação dos conceitos e limitações.
 
 ## Instalação
 
@@ -142,6 +145,8 @@ observações de retorno e os seguintes resultados para 95% de confiança:
 | --- | ---: |
 | VaR histórico | 1,8589% |
 | VaR paramétrico normal | 1,8729% |
+| Expected Shortfall histórico | 2,2828% |
+| Expected Shortfall paramétrico normal | 2,3547% |
 | Violações do VaR histórico | 25 (5,01%) |
 | Kupiec (p-valor) | 0,9918 |
 | Christoffersen — independência (p-valor) | 0,8044 |
@@ -156,6 +161,11 @@ de retornos por uma distribuição normal. O VaR histórico indica que, em condi
 semelhantes às observadas, uma perda diária de aproximadamente 1,86% seria
 excedida em cerca de 5% dos dias. As 25 violações correspondem a 5,01% da amostra,
 valor próximo à taxa esperada para o nível de confiança adotado.
+
+O Expected Shortfall histórico estima uma perda média de 2,28% nos piores 5% dos
+dias, acima do limite indicado pelo VaR. O resultado paramétrico de 2,35% é um
+pouco mais conservador neste exemplo e incorpora a severidade média da cauda, não
+apenas o ponto de corte.
 
 Ao nível de significância de 5%, os três p-valores são superiores a 0,05. Assim,
 não há evidência para rejeitar a frequência esperada de violações, sua
@@ -172,7 +182,7 @@ específicos das violações, mas não demonstram isoladamente que o modelo é a
 - suporte a pesos de carteira;
 - estimação e uso da matriz de covariância;
 - VaR por simulação de Monte Carlo;
-- Expected Shortfall;
+- Expected Shortfall por simulação de Monte Carlo;
 - backtesting fora da amostra com janelas móveis;
 - visualizações e geração de relatórios.
 

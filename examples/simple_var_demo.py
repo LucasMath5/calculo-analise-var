@@ -18,7 +18,12 @@ from src.backtesting import (
     kupiec_test,
 )
 from src.returns import calculate_simple_returns
-from src.var_methods import historical_var, normal_parametric_var
+from src.var_methods import (
+    historical_expected_shortfall,
+    historical_var,
+    normal_parametric_expected_shortfall,
+    normal_parametric_var,
+)
 
 
 def main() -> None:
@@ -34,6 +39,11 @@ def main() -> None:
     confidence_level = 0.95
     historical = historical_var(returns, confidence_level)
     parametric = normal_parametric_var(returns, confidence_level)
+    historical_es = historical_expected_shortfall(returns, confidence_level)
+    parametric_es = normal_parametric_expected_shortfall(
+        returns,
+        confidence_level,
+    )
     violations = calculate_var_violations(returns, historical)
     kupiec_result = kupiec_test(violations, confidence_level)
     independence_result = christoffersen_independence_test(violations)
@@ -42,11 +52,13 @@ def main() -> None:
         confidence_level,
     )
 
-    print("Cálculo e Análise de Value at Risk")
+    print("Cálculo e Análise de Value at Risk e Expected Shortfall")
     print(f"Observações de retorno: {len(returns)}")
     print(f"Nível de confiança: {confidence_level:.0%}")
     print(f"VaR histórico: {historical:.4%}")
     print(f"VaR paramétrico normal: {parametric:.4%}")
+    print(f"Expected Shortfall histórico: {historical_es:.4%}")
+    print(f"Expected Shortfall paramétrico normal: {parametric_es:.4%}")
     print(f"Violações do VaR histórico: {int(violations.sum())}")
     print(f"Teste de Kupiec (p-valor): {kupiec_result['p_value']:.4f}")
     print(
